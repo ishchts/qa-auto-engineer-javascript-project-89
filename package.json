@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:ui": "npx vitest --ui"
+    "test:ui": "npx vitest --ui",
+    "vitest-preview": "vitest-preview"
   },
   "dependencies": {
     "@hexlet/chatbot-v2": "0.2.4",
@@ -34,6 +35,7 @@
     "globals": "15.9.0",
     "jsdom": "25.0.1",
     "vite": "5.4.1",
-    "vitest": "2.1.1"
+    "vitest": "2.1.1",
+    "vitest-preview": "0.0.1"
   }
 }
