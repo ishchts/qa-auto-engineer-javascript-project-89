@@ -5,6 +5,7 @@ import steps from '@hexlet/chatbot-v2/example-steps';
 function App() {
   return (
     <>
+      Lorem, ipsum.
       {Widget(steps)}
     </>
   )
