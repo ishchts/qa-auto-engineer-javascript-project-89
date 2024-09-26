@@ -1,7 +1,6 @@
-import { render, screen, cleanup } from '@testing-library/react';
+import { screen, cleanup } from '@testing-library/react';
 import { expect, test, beforeEach, vi, describe, afterEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import { debug } from 'vitest-preview';
 
 import { WidgetPage } from './pages/WidgetPage';
 import { AppPage } from './pages/AppPage';
