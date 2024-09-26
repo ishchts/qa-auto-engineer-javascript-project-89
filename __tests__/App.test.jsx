@@ -1,88 +1,84 @@
-import { render, screen } from '@testing-library/react';
-import { expect, test, beforeEach, vi, describe } from 'vitest';
-import App from '../src/App';
+import { render, screen, cleanup } from '@testing-library/react';
+import { expect, test, beforeEach, vi, describe, afterEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import { debug } from 'vitest-preview';
+
+import { WidgetPage } from './pages/WidgetPage';
+import { AppPage } from './pages/AppPage';
 
 const mockScrollIntoView = vi.fn();
 
 beforeEach(() => {
     window.HTMLElement.prototype.scrollIntoView = mockScrollIntoView;
+    vi.clearAllMocks();
 });
 
-const runApp = () => {
-    const user = userEvent.setup();
-    render(<App />);
+afterEach(() => {
+    cleanup();
+});
 
-    return { user };
-}
+describe('Widget test', () => {
+    test('Opens the dialog and verifies its content', async () => {
+        WidgetPage.render();
+        const user = userEvent.setup();
+        const widget = new WidgetPage(screen, user);
 
-describe('Widget App', () => {
-    test('Opens chat widget when "Открыть Чат" is clicked', async () => {
-        const { user } = runApp();
-
-        const button = screen.getByText('Открыть Чат');
-        await user.click(button);
-
-        const dialog = await screen.findByRole('dialog');
-        const closeButton = screen.getByLabelText('Close');
-        const startDialogButton = screen.getByText('Начать разговор');
-        const dialogTitle = 'Виртуальный помощник';
-
-        expect(dialog).toHaveTextContent(dialogTitle);
-        expect(startDialogButton).toBeInTheDocument();
-        expect(closeButton).toBeInTheDocument();
-
-        await user.click(closeButton);
-        expect(dialog).not.toBeInTheDocument();
+        await widget.openDialog();
+        await widget.verifyDialogIsOpen();
     });
 
-    test('career change scenario', async () => {
-        const { user } = runApp();
+    test('Closes the dialog after opening', async () => {
+        WidgetPage.render();
+        const user = userEvent.setup();
+        const widget = new WidgetPage(screen, user);
 
-        const button = screen.getByText('Открыть Чат');
-        await user.click(button);
+        await widget.openDialog();
+        await widget.closeDialog();
 
-        const startDialogButton = await screen.findByText('Начать разговор');
-        await user.click(startDialogButton);
-
-        const switchButton = await screen.findByText('Сменить профессию или трудоустроиться');
-        await user.click(switchButton);
-
-        const detailsButton = await screen.findByText('Расскажи подробнее');
-        await user.click(detailsButton);
-
-        const subscribeButton = await screen.findByText('Останусь здесь, запишусь на курс');
-        expect(subscribeButton).toBeInTheDocument();
-        const startButton = await screen.findByText('Вернуться в начало');
-
-        await user.click(startButton);
-
-        const tryButton = await screen.findByText('Попробовать себя в IT');
-        const advancedButton = await screen.findByText('Я разработчик, хочу углубить свои знания');
-
-        expect(switchButton).toBeInTheDocument();
-        expect(tryButton).toBeInTheDocument();
-        expect(advancedButton).toBeInTheDocument();
-
-
-        await user.click(switchButton);
-        const otherTryButton = await screen.findByText('А есть что-нибудь попроще');
-        await user.click(otherTryButton);
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 
-    test('Try your hand at IT', async () => {
-        const { user } = runApp();
+    test('Opens the conversation and checks the contents of the first screen.', async () => {
+        WidgetPage.render();
+        const user = userEvent.setup();
+        const widget = new WidgetPage(screen, user);
 
-        const button = screen.getByText('Открыть Чат');
-        await user.click(button);
-
-        const startDialogButton = await screen.findByText('Начать разговор');
-        await user.click(startDialogButton);
-        const tryButton = await screen.findByText('Попробовать себя в IT');
-        await user.click(tryButton);
-
-        await screen.findByText('Интересно');
-        await screen.findByText('А что по поводу смены профессии?');
-        await screen.findByText('Вернуться назад');
+        await widget.openDialog();
+        await widget.startDialog();
+        await widget.verifyConversationStarted();
+        await widget.changeProfessionOrGetAjob();
     });
+
+    test('on new message scrollIntoView ', async () => {
+        WidgetPage.render();
+        const user = userEvent.setup();
+        const widget = new WidgetPage(screen, user);
+        await widget.openDialog();
+        expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledTimes(1);
+        await widget.startDialog();
+        expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledTimes(2);
+    });
+});
+
+describe('app test', () => {
+    test('form is displayed and submit ', async () => {
+        const user = userEvent.setup();
+        AppPage.render();
+        const app = new AppPage(screen, user);
+        app.verifyFormFieldsDisplayed();
+        await app.fillFormFiedl();
+        await app.submitForm();
+        app.expectedSubmitResult();
+    });
+
+    test('Widget does not affect the functionality of the application', async () => {
+        const user = userEvent.setup();
+        AppPage.render();
+        const app = new AppPage(screen, user);
+        const widget = new WidgetPage(screen, user);
+
+        await widget.openDialog();
+        await widget.verifyDialogIsOpen();
+        app.verifyFormFieldsDisplayed();
+      });
 });
