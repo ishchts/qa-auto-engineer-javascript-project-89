@@ -39,6 +39,7 @@ export default [
       'comma-dangle': ['error', 'always-multiline'],
       quotes: ['error', 'single'],
       'eol-last': ['error', 'always'], 
+      'import/no-extraneous-dependencies': 'off',
     },
   },
 ];
