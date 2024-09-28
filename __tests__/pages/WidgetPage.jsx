@@ -5,7 +5,7 @@ import steps from '../../__fixtures__/step';
 
 export class WidgetPage {
     static render() {
-        render(Widget(steps))
+        render(Widget(steps));
     }
     constructor(screen, user) {
         this.screen = screen;

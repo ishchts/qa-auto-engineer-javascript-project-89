@@ -4,7 +4,7 @@ import App from '../../src/App';
 
 export class AppPage {
     static render() {
-        render(<App />)
+        render(<App />);
     }
     constructor(screen, user) {
         this.screen = screen;
@@ -14,7 +14,7 @@ export class AppPage {
             password: { label: 'Пароль', node: null},
             address: { label: 'Адрес', node: null },
             city: { label: 'Город', node: null },
-        }
+        };
     }
 
     verifyFormFieldsDisplayed() {
