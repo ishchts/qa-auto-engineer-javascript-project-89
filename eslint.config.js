@@ -40,6 +40,7 @@ export default [
       quotes: ['error', 'single'],
       'eol-last': ['error', 'always'], 
       'import/no-extraneous-dependencies': 'off',
+      'no-trailing-spaces': 'off',
     },
   },
 ];
