@@ -9,7 +9,7 @@ export default defineConfig({
     globals: true,
     css: true,
     environment: 'jsdom',
-    setupFiles: './vitest.setup.js',
+    // setupFiles: './vitest.setup.js',
     deps: {
       inline: ['@hexlet/chatbot-v2'], // Adjust this as needed
       web: {

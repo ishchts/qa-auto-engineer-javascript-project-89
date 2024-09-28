@@ -1,6 +1,7 @@
 import { screen, cleanup } from '@testing-library/react';
 import { expect, test, beforeEach, vi, describe, afterEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
 
 import { WidgetPage } from './pages/WidgetPage';
 import { AppPage } from './pages/AppPage';
